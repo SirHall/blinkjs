@@ -222,9 +222,14 @@ export class Kernel {
     }
 }
 
-function prepareFragmentShader(inputs: , outputDescriptors, source) {
+function prepareFragmentShader(
+    inputs: Record<string, Buffer>,
+    outputDescriptors: Record<string, Descriptor>,
+    source: string
+) {
     let uniforms = Object.entries(inputs).map(([name, buffer]) => {
-        const { inputType, precision } = buffer.formatInfo;
+        const { inputType, precision } =
+            buffer.formatInfo ?? _throw("Buffer format not found.");
         return `uniform ${precision} ${inputType} ${name};`;
     });
 

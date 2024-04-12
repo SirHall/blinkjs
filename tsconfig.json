@@ -3,16 +3,9 @@
         "incremental": true,
         "tsBuildInfoFile": "./dist/.tsbuildinfo",
         "target": "ES2022",
-        "lib": [
-            "es2022",
-            "DOM",
-            "WebWorker",
-            "DOM.Iterable"
-        ],
-        "module": "AMD",
-        "types": [
-            "node"
-        ],
+        "lib": ["es2022", "DOM", "WebWorker", "DOM.Iterable"],
+        "module": "NodeNext",
+        "types": ["node"],
         "allowJs": true,
         "checkJs": false,
         "declaration": true,
@@ -30,5 +23,6 @@
         "strictNullChecks": true,
         "skipDefaultLibCheck": true,
         "skipLibCheck": true
-    }
+    },
+    "include": ["src"]
 }
