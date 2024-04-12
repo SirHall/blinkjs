@@ -1,30 +1,33 @@
 {
-  "name": "blink.js",
-  "version": "0.4.0",
-  "description": "Easy GPGPU on the web, powered by WebGL 2.0.",
-  "main": "dist/blink.js",
-  "module": "src/index.js",
-  "homepage": "https://github.com/frzi/blinkjs",
-  "repository": "frzi/blinkjs",
-  "scripts": {
-    "dev": "rollup -c --dev -w",
-    "build": "rollup -c",
-    "minify": "minify dist/blink.js --out-file dist/blink.min.js",
-    "final": "npm run build && npm run minify",
-    "prepublishOnly": "npm run final"
-  },
-  "keywords": [
-    "blink",
-    "compute",
-    "es6",
-    "gpgpu",
-    "webgl"
-  ],
-  "author": "frzi",
-  "license": "MIT",
-  "devDependencies": {
-    "babel-minify": "^0.3.0",
-    "rollup": "^0.58.2",
-    "rollup-plugin-jscc": "^0.3.3"
-  }
+    "name": "blink.js",
+    "version": "0.4.0",
+    "description": "Easy GPGPU on the web, powered by WebGL 2.0.",
+    "main": "dist/blink.js",
+    "module": "src/index.js",
+    "homepage": "https://github.com/frzi/blinkjs",
+    "repository": "frzi/blinkjs",
+    "scripts": {
+        "dev": "rollup -c --dev -w",
+        "build": "rollup -c",
+        "minify": "minify dist/blink.js --out-file dist/blink.min.js",
+        "final": "npm run build && npm run minify",
+        "prepublishOnly": "npm run final",
+        "lint": "npx prettier . --write"
+    },
+    "keywords": [
+        "blink",
+        "compute",
+        "es6",
+        "gpgpu",
+        "webgl"
+    ],
+    "author": "frzi",
+    "license": "MIT",
+    "devDependencies": {
+        "babel-minify": "^0.3.0",
+        "prettier": "3.2.5",
+        "rollup": "^0.58.2",
+        "rollup-plugin-jscc": "^0.3.3",
+        "typescript": "5.4.5"
+    }
 }

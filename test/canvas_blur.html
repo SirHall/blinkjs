@@ -1,19 +1,33 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>Blur</title>
-		<style>
-			body                    {font-family:sans-serif;}
-			div                     {float:left; margin:10px;}
-			canvas, button, span    {display:block;}
-			button, span            {width:400px; padding:4px 0; margin-top:20px;}
-		</style>
-		<script src="../dist/blink.js"></script>
-	</head>
-	<body>
-		<script>
-			const kernelSource = `
+    <head>
+        <meta charset="utf-8" />
+        <title>Blur</title>
+        <style>
+            body {
+                font-family: sans-serif;
+            }
+            div {
+                float: left;
+                margin: 10px;
+            }
+            canvas,
+            button,
+            span {
+                display: block;
+            }
+            button,
+            span {
+                width: 400px;
+                padding: 4px 0;
+                margin-top: 20px;
+            }
+        </style>
+        <script src="../dist/blink.js"></script>
+    </head>
+    <body>
+        <script>
+            const kernelSource = `
 				#define PI2   6.283185307179586
 
 				uniform int samples;
@@ -35,161 +49,188 @@
 
 					color /= weight;
 					out_color = color;
-				}`	
+				}`;
 
-			const uniforms = {
-				rings: 5,
-				samples: 5
-			}
+            const uniforms = {
+                rings: 5,
+                samples: 5,
+            };
 
-			makeTest('Buffer', function (ctx, onDone) {
-				// Get the canvas data.
-				let imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+            makeTest("Buffer", function (ctx, onDone) {
+                // Get the canvas data.
+                let imageData = ctx.getImageData(
+                    0,
+                    0,
+                    ctx.canvas.width,
+                    ctx.canvas.height
+                );
 
-				// Create buffer.
-				let buffer = new blink.Buffer({
-					data: imageData.data,
-					vector: 4,
-				})
+                // Create buffer.
+                let buffer = new blink.Buffer({
+                    data: imageData.data,
+                    vector: 4,
+                });
 
-				let kernel = new blink.Kernel({
-					input: { in_color: buffer },
-					output: { out_color: buffer }
-				}, kernelSource)
+                let kernel = new blink.Kernel(
+                    {
+                        input: { in_color: buffer },
+                        output: { out_color: buffer },
+                    },
+                    kernelSource
+                );
 
-				for (let a = 0; a < 5; a++) {
-					kernel.exec(uniforms)
-				}
+                for (let a = 0; a < 5; a++) {
+                    kernel.exec(uniforms);
+                }
 
-				ctx.putImageData(imageData, 0, 0)
+                ctx.putImageData(imageData, 0, 0);
 
-				// Clean up.
-				kernel.delete()
+                // Clean up.
+                kernel.delete();
 
-				onDone()
-			})
+                onDone();
+            });
 
-			makeTest('DeviceBuffer', function (ctx, onDone) {
-				let imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+            makeTest("DeviceBuffer", function (ctx, onDone) {
+                let imageData = ctx.getImageData(
+                    0,
+                    0,
+                    ctx.canvas.width,
+                    ctx.canvas.height
+                );
 
-				let buffer = new blink.DeviceBuffer({
-					data: imageData.data,
-					vector: 4,
-				})
+                let buffer = new blink.DeviceBuffer({
+                    data: imageData.data,
+                    vector: 4,
+                });
 
-				let kernel = new blink.Kernel({
-					input: { in_color: buffer },
-					output: { out_color: buffer }
-				}, kernelSource)
+                let kernel = new blink.Kernel(
+                    {
+                        input: { in_color: buffer },
+                        output: { out_color: buffer },
+                    },
+                    kernelSource
+                );
 
-				for (let a = 0; a < 5; a++) {
-					kernel.exec(uniforms)
-				}
+                for (let a = 0; a < 5; a++) {
+                    kernel.exec(uniforms);
+                }
 
-				// Download to the original ImageData object.
-				buffer.toHost(imageData.data)
+                // Download to the original ImageData object.
+                buffer.toHost(imageData.data);
 
-				ctx.putImageData(imageData, 0, 0)
+                ctx.putImageData(imageData, 0, 0);
 
-				// Clean up.
-				kernel.delete()
-				buffer.delete()
+                // Clean up.
+                kernel.delete();
+                buffer.delete();
 
-				onDone()
-			})
+                onDone();
+            });
 
-			makeTest('DeviceBuffer (async read)', function (ctx, onDone) {
-				if (!blink.DeviceBuffer.prototype.toHostAsync) {
-					alert('WEBGL_get_buffer_sub_data_async not supported. :(')
-					return
-				}
+            makeTest("DeviceBuffer (async read)", function (ctx, onDone) {
+                if (!blink.DeviceBuffer.prototype.toHostAsync) {
+                    alert("WEBGL_get_buffer_sub_data_async not supported. :(");
+                    return;
+                }
 
-				let imageData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+                let imageData = ctx.getImageData(
+                    0,
+                    0,
+                    ctx.canvas.width,
+                    ctx.canvas.height
+                );
 
-				let buffer = new blink.DeviceBuffer({
-					data: imageData.data,
-					vector: 4,
-				})
+                let buffer = new blink.DeviceBuffer({
+                    data: imageData.data,
+                    vector: 4,
+                });
 
-				let kernel = new blink.Kernel({
-					input: { in_color: buffer },
-					output: { out_color: buffer }
-				}, kernelSource)
+                let kernel = new blink.Kernel(
+                    {
+                        input: { in_color: buffer },
+                        output: { out_color: buffer },
+                    },
+                    kernelSource
+                );
 
-				for (let a = 0; a < 5; a++) {
-					kernel.exec(uniforms)
-				}
+                for (let a = 0; a < 5; a++) {
+                    kernel.exec(uniforms);
+                }
 
-				// Download to the original ImageData object.
-				buffer.toHostAsync(imageData.data).then(arr => {
-					ctx.putImageData(imageData, 0, 0)
+                // Download to the original ImageData object.
+                buffer.toHostAsync(imageData.data).then(arr => {
+                    ctx.putImageData(imageData, 0, 0);
 
-					// Clean up.
-					kernel.delete()
-					buffer.delete()
+                    // Clean up.
+                    kernel.delete();
+                    buffer.delete();
 
-					onDone()
-				})
-			})
+                    onDone();
+                });
+            });
 
+            function makeTest(title, onClick) {
+                let div = document.createElement("div");
 
-			function makeTest(title, onClick) {
-				let div = document.createElement('div')
+                let h1 = document.createElement("h1");
+                h1.textContent = title;
+                div.appendChild(h1);
 
-				let h1 = document.createElement('h1')
-				h1.textContent = title
-				div.appendChild(h1)
+                let canvas = document.createElement("canvas");
+                canvas.width = canvas.height = 400;
+                div.appendChild(canvas);
 
-				let canvas = document.createElement('canvas')
-				canvas.width = canvas.height = 400
-				div.appendChild(canvas)
+                let rect = [0, 0, canvas.width, canvas.height];
 
-				let rect = [0, 0, canvas.width, canvas.height]
+                // Draw on the canvas.
+                const ctx = canvas.getContext("2d");
+                let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, "rgb(255, 0, 0)");
+                gradient.addColorStop(0.2, "rgb(255, 255, 0)");
+                gradient.addColorStop(0.4, "rgb(0, 255, 0)");
+                gradient.addColorStop(0.6, "rgb(0, 255, 255)");
+                gradient.addColorStop(0.8, "rgb(0, 0, 255)");
+                gradient.addColorStop(1, "rgb(255, 0, 255)");
+                ctx.fillStyle = gradient;
+                ctx.fillRect(...rect);
 
-				// Draw on the canvas.
-				const ctx = canvas.getContext('2d')
-				let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-				gradient.addColorStop(0, 'rgb(255, 0, 0)')
-				gradient.addColorStop(0.2, 'rgb(255, 255, 0)')
-				gradient.addColorStop(0.4, 'rgb(0, 255, 0)')
-				gradient.addColorStop(0.6, 'rgb(0, 255, 255)')
-				gradient.addColorStop(0.8, 'rgb(0, 0, 255)')
-				gradient.addColorStop(1, 'rgb(255, 0, 255)')
-				ctx.fillStyle = gradient
-				ctx.fillRect(...rect)
+                ctx.fillStyle = "black";
+                ctx.fillRect(100, 100, canvas.width - 200, canvas.height - 200);
 
-				ctx.fillStyle = 'black'
-				ctx.fillRect(100, 100, canvas.width - 200, canvas.height - 200)
+                const text = `blink.js ${blink.VERSION}`;
+                ctx.fillStyle = "rgb(0, 255, 0)";
+                ctx.font = "50px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "top";
+                ctx.lineWidth = 14;
+                ctx.strokeStyle = "white";
+                ctx.strokeText(
+                    text,
+                    canvas.width / 2,
+                    (canvas.height - 50) / 2
+                );
+                ctx.fillText(text, canvas.width / 2, (canvas.height - 50) / 2);
 
-				const text = `blink.js ${blink.VERSION}`
-				ctx.fillStyle = 'rgb(0, 255, 0)'
-				ctx.font = '50px sans-serif'
-				ctx.textAlign = 'center'
-				ctx.textBaseline = 'top'
-				ctx.lineWidth = 14
-				ctx.strokeStyle = 'white'
-				ctx.strokeText(text, canvas.width / 2, (canvas.height - 50) / 2)
-				ctx.fillText(text, canvas.width / 2, (canvas.height - 50) / 2)
+                // Button.
+                let button = document.createElement("button");
+                button.textContent = "Blur 5x";
 
-				// Button.
-				let button = document.createElement('button')
-				button.textContent = 'Blur 5x'
-				
-				button.addEventListener('click', function () {
-					let then = performance.now()
-					button.remove()
-					onClick(ctx, function () {
-						span.textContent = `${performance.now() - then} ms`
-					})
-				})
+                button.addEventListener("click", function () {
+                    let then = performance.now();
+                    button.remove();
+                    onClick(ctx, function () {
+                        span.textContent = `${performance.now() - then} ms`;
+                    });
+                });
 
-				div.appendChild(button)
+                div.appendChild(button);
 
-				let span = document.createElement('span')
-				div.appendChild(span)
+                let span = document.createElement("span");
+                div.appendChild(span);
 
-				document.body.appendChild(div)
-			}
-		</script>
-	</body>
+                document.body.appendChild(div);
+            }
+        </script>
+    </body>
 </html>
