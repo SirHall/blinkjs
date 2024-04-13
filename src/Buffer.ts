@@ -133,7 +133,7 @@ export class Buffer {
     }
 }
 
-function textureForBuffer(buffer: Buffer, data?: common.TypedArray) {
+function textureForBuffer(buffer: Buffer, data?: common.TypedArray): Texture {
     const { bytes, internalFormat, format, type } =
         buffer.formatInfo ?? common._throw(`Buffer has no data`);
     const [width, height] = buffer.dimensions;

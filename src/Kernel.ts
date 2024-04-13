@@ -126,7 +126,7 @@ export class Kernel {
         this.outputs = {};
     }
 
-    exec(uniforms = {}) {
+    exec(uniforms: Record<string, unknown> = {}) {
         // Check dimensions.
         let size: number[] = [];
         for (const output of Object.values(this.outputs)) {
