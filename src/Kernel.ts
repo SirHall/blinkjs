@@ -2,6 +2,7 @@ import { device, gl } from "./WebGL/Context";
 import { Program } from "./WebGL/Program";
 import { Buffer } from "./Buffer";
 import { _throw, OutType, PrecisionOption } from "./common";
+import { DeviceBuffer } from "./DeviceBuffer";
 
 const fragTemplate = /*glsl*/ `#version 300 es
 
@@ -18,8 +19,8 @@ highp uint bl_Id() {
 }`;
 
 export interface KernelIOOptions {
-    inputs?: Record<string, Buffer>;
-    outputs: Record<string, Buffer>;
+    inputs?: Record<string, Buffer | DeviceBuffer>;
+    outputs: Record<string, Buffer | DeviceBuffer>;
 }
 
 export interface Descriptor {
@@ -38,8 +39,8 @@ export interface Descriptor {
  */
 
 export class Kernel {
-    inputs: Record<string, Buffer> = {};
-    outputs: Record<string, Buffer> = {};
+    inputs: Record<string, Buffer | DeviceBuffer> = {};
+    outputs: Record<string, Buffer | DeviceBuffer> = {};
     steps: Set<{ out: string[]; program: Program }>;
 
     constructor(io: KernelIOOptions, source: string) {
@@ -223,7 +224,7 @@ export class Kernel {
 }
 
 function prepareFragmentShader(
-    inputs: Record<string, Buffer>,
+    inputs: Record<string, Buffer | DeviceBuffer>,
     outputDescriptors: Record<string, Descriptor>,
     source: string
 ) {
