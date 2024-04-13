@@ -1,5 +1,5 @@
 {
-    "name": "blink.js",
+    "name": "@sirhall/blink.js",
     "version": "0.4.1",
     "description": "Easy GPGPU on the web, powered by WebGL 2.0.",
     "main": "dist/index.js",
@@ -7,7 +7,7 @@
     "homepage": "https://github.com/frzi/blinkjs",
     "repository": "frzi/blinkjs",
     "scripts": {
-        "build": "npm run tsc",
+        "build": "npx tsc",
         "prepublishOnly": "npm run build",
         "lint": "npx prettier . --write"
     },
@@ -21,10 +21,7 @@
     "author": "frzi",
     "license": "MIT",
     "devDependencies": {
-        "babel-minify": "^0.3.0",
         "prettier": "3.2.5",
-        "rollup": "^0.58.2",
-        "rollup-plugin-jscc": "^0.3.3",
         "typescript": "5.4.5"
     }
 }
