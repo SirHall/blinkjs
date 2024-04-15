@@ -242,11 +242,5 @@ function prepareFragmentShader(
         return `${layout}${props.precision} ${props.outputType} ${name};`;
     });
 
-    return `${fragTemplate}
-
-		${uniforms.join("\n\r")}
-
-		${outs.join("\n\r")}
-
-		${source}`;
+    return `${fragTemplate}\n\n${uniforms.join("\n")}\n\n${outs.join("\n")}\n\n${source}`;
 }
