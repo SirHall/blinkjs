@@ -133,7 +133,7 @@ function compileShader(type: GLenum, source: string) {
         const typeName = type == gl.VERTEX_SHADER ? "vertex" : "fragment";
         const infoLog = gl.getShaderInfoLog(shader);
         throw new Error(
-            `Unable to compile ${typeName} shader. Info log: ${infoLog}`
+            `Unable to compile ${typeName} shader.\nINFO LOG: ${infoLog}\nSOURCE SHADER:\n${source}`
         );
     }
 

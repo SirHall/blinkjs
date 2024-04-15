@@ -1,11 +1,11 @@
 {
     "name": "@sirhall/blink.js",
-    "version": "0.4.4",
+    "version": "0.4.5",
     "description": "Easy GPGPU on the web, powered by WebGL 2.0.",
     "main": "dist/index.js",
     "module": "src/index.js",
-    "homepage": "https://github.com/frzi/blinkjs",
-    "repository": "frzi/blinkjs",
+    "homepage": "https://github.com/SirHall/blinkjs",
+    "repository": "SirHall/blinkjs",
     "scripts": {
         "build": "npx tsc",
         "prepublishOnly": "npm run build",
