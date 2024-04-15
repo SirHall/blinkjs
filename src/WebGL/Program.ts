@@ -28,8 +28,10 @@ const vertexShader = lazy(
  */
 export class Program {
     id: WebGLProgram | undefined;
-    uniforms: Record<string, WebGLActiveInfo & { id: WebGLUniformLocation }> =
-        {};
+    uniforms: Record<
+        string,
+        { id: WebGLUniformLocation; uniform: WebGLActiveInfo }
+    > = {};
 
     constructor(fragSource: string) {
         let fragShader =
@@ -84,7 +86,7 @@ export class Program {
                 _throw(`Unable to get uniform location for ${uniform.name}`);
 
             this.uniforms[uniform.name] = {
-                ...uniform,
+                uniform,
                 id,
             };
         }
@@ -101,7 +103,10 @@ export class Program {
             return;
         }
 
-        const { id, size, type } = this.uniforms[name];
+        const {
+            id,
+            uniform: { size, type },
+        } = this.uniforms[name];
 
         // TODO: Assume this is valid, come back later to make this type-safe
         let fnName = (uniformsFnTable as any)[type];

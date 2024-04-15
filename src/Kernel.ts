@@ -160,7 +160,7 @@ export class Kernel {
             }
 
             const { program } = step;
-            if (!program.id) _throw("Program not compiled.");
+            if (!program.id) throw new Error("Program not compiled.");
             gl.useProgram(program.id);
 
             gl.viewport(0, 0, size[0], size[1]);
@@ -178,7 +178,7 @@ export class Kernel {
                 gl.activeTexture(gl.TEXTURE0 + index);
                 const texture = this.inputs[name]._getReadable(true);
 
-                if (!texture?.id) _throw("Texture not created.");
+                if (!texture?.id) throw new Error("Texture not created.");
                 gl.bindTexture(gl.TEXTURE_2D, texture.id);
                 program.setUniform(name, index);
             }

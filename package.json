@@ -1,6 +1,6 @@
 {
     "name": "@sirhall/blink.js",
-    "version": "0.4.6",
+    "version": "0.4.7",
     "description": "Easy GPGPU on the web, powered by WebGL 2.0.",
     "main": "dist/index.js",
     "module": "src/index.js",
