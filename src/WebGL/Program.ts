@@ -114,12 +114,10 @@ export class Program {
             fnName += "v";
         }
 
-        const glFn = (gl as any)[fnName];
-
         if (fnName.includes("Matrix")) {
-            glFn(id, false, ...values);
+            (gl as any)[fnName](id, false, ...values);
         } else {
-            glFn(id, ...values);
+            (gl as any)[fnName](id, ...values);
         }
     }
 }
