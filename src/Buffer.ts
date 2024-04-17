@@ -22,7 +22,7 @@ export interface BufferConstructorArgs {
     alloc?: number;
     data?: common.TypedArray;
     type?: common.DataType;
-    vector?: number;
+    vector?: common.VecSizes;
     wrap?: common.WrapMode | [common.WrapMode, common.WrapMode];
 }
 
@@ -30,7 +30,7 @@ export let readablesMap = new WeakMap<Buffer | DeviceBuffer, Texture>();
 export let writablesMap = new WeakMap();
 
 export class Buffer {
-    vector: number;
+    vector: common.VecSizes;
     dimensions: [number, number];
     wrap: [common.WrapMode, common.WrapMode];
     data: common.TypedArray | undefined;
@@ -42,7 +42,7 @@ export class Buffer {
         vector = 1,
         wrap = common.CLAMP,
     }: BufferConstructorArgs) {
-        this.vector = Math.min(Math.max(vector, 1), 4);
+        this.vector = Math.min(Math.max(vector, 1), 4) as common.VecSizes;
         if (this.vector == 3) {
             console.warn(
                 "Vector size of 3 not supported. Choosing vector size 4."

@@ -53,7 +53,14 @@ export const ARRAY_TYPES = new Map<new () => TypedArray, DataType>([
     [Uint8ClampedArray, UINT8],
 ]);
 
-export type OutType = "uint" | "int" | "float" | "uvec" | "ivec" | "vec";
+export type VecSizes = 1 | 2 | 3 | 4;
+export type OutType =
+    | "uint"
+    | "int"
+    | "float"
+    | `uvec${VecSizes}`
+    | `ivec${VecSizes}`
+    | `vec${VecSizes}`;
 
 export interface FormatInfo {
     bytes: DataTypeBytes;
@@ -82,7 +89,10 @@ export type FormatType =
 export type Formats = `${(typeof formatOptions)[number]}${"_INTEGER" | ""}`;
 
 // Hands out all the types associated with a Buffer's data.
-export function formatInfo(dataType: DataType, vectorSize = 1): FormatInfo {
+export function formatInfo(
+    dataType: DataType,
+    vectorSize: VecSizes = 1
+): FormatInfo {
     const { bytes, integer, unsigned } = dataType;
 
     const precision = precisionOptions[bytes - 1];
@@ -92,14 +102,14 @@ export function formatInfo(dataType: DataType, vectorSize = 1): FormatInfo {
         : integer ? "isampler2D"
         : "sampler2D";
 
-    const outputType =
+    const outputType: OutType =
         vectorSize === 1 ?
             integer && unsigned ? "uint"
             : integer ? "int"
             : "float"
-        : integer && unsigned ? "uvec"
-        : integer ? "ivec"
-        : "vec";
+        : integer && unsigned ? `uvec${vectorSize}`
+        : integer ? `ivec${vectorSize}`
+        : `vec${vectorSize}`;
 
     // Size is: 8, 16 or 32
     // TODO: TypeScript doesn't seem to support this

@@ -14,6 +14,7 @@ import {
     formatInfo,
     ARRAY_CONSTRUCTORS,
     _throw,
+    VecSizes,
 } from "./common";
 
 export interface DebugBufferConstructorArgs {
@@ -34,7 +35,7 @@ export interface DebugBufferConstructorArgs {
  * Memory from the host can be copied to the device and vice versa.
  */
 export class DeviceBuffer {
-    vector: number;
+    vector: VecSizes;
     size: number;
     dimensions: [number, number];
     wrap: [WrapMode, WrapMode];
@@ -47,7 +48,7 @@ export class DeviceBuffer {
         vector = 1,
         wrap = CLAMP,
     }: DebugBufferConstructorArgs) {
-        this.vector = Math.min(Math.max(vector, 1), 4);
+        this.vector = Math.min(Math.max(vector, 1), 4) as VecSizes;
         if (this.vector == 3) {
             console.warn(
                 "Vector size of 3 not supported. Choosing vector size 4."
